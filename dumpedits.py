@@ -21,7 +21,7 @@ try:
 
         curContinue = json["continue"]["rccontinue"]
 
-        with open("out.txt", "a", encoding="utf-8") as outFile:
+        with open("edits.txt", "a", encoding="utf-8") as outFile:
             for change in json["query"]["recentchanges"]:
                 if "comment" not in change:
                     continue
