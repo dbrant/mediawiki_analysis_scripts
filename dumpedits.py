@@ -4,17 +4,23 @@ import sys
 import signal
 import requests
 
-wikiSite = "en.wikipedia.org"
+wikiSite = "www.wikidata.org"
+#wikiSite = "en.wikipedia.org"
+tagFilter = "android app edit"
+olderThanTime = "2021-11-30T17:23:37.000Z"
 response = None
 
 try:
     curContinue = ""
     while True:
-        print("Fetching data with continuation: " + curContinue)
 
-        req = 'https://' + wikiSite + '/w/api.php?format=json&formatversion=2&action=query&list=recentchanges&rcnamespace=0&rclimit=100&rctag=android app edit&rcprop=title|timestamp|ids|flags|comment|user|loginfo|tags'
+        req = 'https://' + wikiSite + '/w/api.php?format=json&formatversion=2&action=query&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|timestamp|ids|flags|comment|user|loginfo|tags'
+        req += '&rctag=' + tagFilter
+        req += '&rcdir=older&rcstart=' + olderThanTime
         if len(curContinue) > 0:
             req += '&rccontinue=' + curContinue
+
+        print("Making request: " + req)
 
         response = requests.get(req)
         json = response.json()
@@ -25,8 +31,8 @@ try:
             for change in json["query"]["recentchanges"]:
                 if "comment" not in change:
                     continue
-                if "#suggested" not in change["comment"]:
-                    continue
+                #if "#suggested" not in change["comment"]:
+                #    continue
                 outFile.write(change["title"] + "\t" + str(change["pageid"]) + "\t" + str(change["revid"]) + "\t" + change["user"] + "\t"
                 + change["timestamp"] + "\t" + change["comment"] + "\t" + ','.join(change["tags"]) + "\n")
 
