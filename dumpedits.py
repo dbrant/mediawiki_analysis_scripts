@@ -34,7 +34,7 @@ try:
                     continue
                 #if "#suggested" not in change["comment"]:
                 #    continue
-                comment = change["comment"].replace("\n", "").replace("\t", "")
+                comment = change["comment"].replace("\n", " ").replace("\t", " ")
                 outFile.write(change["title"] + "\t" + str(change["pageid"]) + "\t" + str(change["revid"]) + "\t" + change["user"] + "\t"
                 + change["timestamp"] + "\t" + comment + "\t" + ','.join(change["tags"]) + "\n")
 
