@@ -4,10 +4,10 @@ import sys
 import signal
 import requests
 
-wikiSite = "www.wikidata.org"
-#wikiSite = "en.wikipedia.org"
+#wikiSite = "www.wikidata.org"
+wikiSite = "en.wikipedia.org"
 tagFilter = "android app edit"
-olderThanTime = "2021-11-30T17:23:37.000Z"
+olderThanTime = "" #"2021-11-30T17:23:37.000Z"
 response = None
 
 try:
@@ -16,7 +16,8 @@ try:
 
         req = 'https://' + wikiSite + '/w/api.php?format=json&formatversion=2&action=query&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|timestamp|ids|flags|comment|user|loginfo|tags'
         req += '&rctag=' + tagFilter
-        req += '&rcdir=older&rcstart=' + olderThanTime
+        if len(olderThanTime) > 0:
+            req += '&rcdir=older&rcstart=' + olderThanTime
         if len(curContinue) > 0:
             req += '&rccontinue=' + curContinue
 
