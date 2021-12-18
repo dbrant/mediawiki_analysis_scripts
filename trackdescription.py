@@ -5,6 +5,8 @@ import signal
 import requests
 import urllib
 
+inFileName = sys.argv[1]
+outFileName = sys.argv[2]
 wikiSite = "en.wikipedia.org"
 response = None
 
@@ -13,7 +15,7 @@ try:
     totalArticles = 0
     totalReverted = 0
 
-    inFile = open("edits.txt", "r", encoding="utf-8")
+    inFile = open(inFileName, "r", encoding="utf-8")
     inLines = inFile.readlines()
 
     for inLine in inLines:
@@ -67,7 +69,7 @@ try:
             
             finalDesc = desc
         
-        with open("out.txt", "a", encoding="utf-8") as outFile:
+        with open(outFileName, "a", encoding="utf-8") as outFile:
             outFile.write(inLine.replace("\n", "") + "\t" + initialDesc + "\t" + finalDesc + "\n")
         
 

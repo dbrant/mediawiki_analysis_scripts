@@ -4,6 +4,7 @@ import sys
 import signal
 import requests
 
+outFileName = sys.argv[1]
 #wikiSite = "www.wikidata.org"
 wikiSite = "en.wikipedia.org"
 tagFilter = "android app edit"
@@ -28,7 +29,7 @@ try:
 
         curContinue = json["continue"]["rccontinue"]
 
-        with open("edits.txt", "a", encoding="utf-8") as outFile:
+        with open(outFileName, "a", encoding="utf-8") as outFile:
             for change in json["query"]["recentchanges"]:
                 if "comment" not in change:
                     continue

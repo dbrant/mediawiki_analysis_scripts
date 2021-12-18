@@ -5,10 +5,11 @@ import signal
 import requests
 import urllib
 
+inFileName = sys.argv[1]
 totalEdits = 0
 totalReverted = 0
 
-inFile = open("enwiki_android_app_edit.txt", "r", encoding="utf-8")
+inFile = open(inFileName, "r", encoding="utf-8")
 inLines = inFile.readlines()
 
 for inLine in inLines:

@@ -8,10 +8,13 @@ import urllib
 # take each line in the input file, parse out the image caption that was
 # added, and append it to the same line in a new file.
 
-inFile = open("commonswiki_caption_edits.txt", "r", encoding="utf-8")
+inFileName = sys.argv[1]
+outFileName = sys.argv[2]
+
+inFile = open(inFileName, "r", encoding="utf-8")
 inLines = inFile.readlines()
 
-outFile = open("commonswiki_caption_edits_post.txt", "w", encoding="utf-8")
+outFile = open(outFileName, "w", encoding="utf-8")
 
 for inLine in inLines:
     comment = inLine.split("\t")[5]
