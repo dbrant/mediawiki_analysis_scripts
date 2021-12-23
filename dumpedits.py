@@ -8,15 +8,20 @@ outFileName = sys.argv[1]
 #wikiSite = "www.wikidata.org"
 wikiSite = "en.wikipedia.org"
 tagFilter = "android app edit"
-olderThanTime = "" #"2021-11-30T17:23:37.000Z"
+namespace = "0"
+olderThanTime = "" #"2021-12-10T17:23:37.000Z"
 response = None
 
 try:
+    outFile = open(outFileName, "a", encoding="utf-8")
+
     curContinue = ""
     while True:
 
-        req = 'https://' + wikiSite + '/w/api.php?format=json&formatversion=2&action=query&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|timestamp|ids|flags|comment|user|loginfo|tags'
-        req += '&rctag=' + tagFilter
+        req = 'https://' + wikiSite + '/w/api.php?format=json&formatversion=2&action=query&list=recentchanges&rctype=edit&rclimit=100&rcprop=title|timestamp|ids|flags|comment|user|loginfo|tags'
+        req += "&rcnamespace=" + namespace
+        if len(tagFilter) > 0:
+            req += '&rctag=' + tagFilter
         if len(olderThanTime) > 0:
             req += '&rcdir=older&rcstart=' + olderThanTime
         if len(curContinue) > 0:
@@ -29,17 +34,16 @@ try:
 
         curContinue = json["continue"]["rccontinue"]
 
-        with open(outFileName, "a", encoding="utf-8") as outFile:
-            for change in json["query"]["recentchanges"]:
-                if "comment" not in change:
-                    continue
-                #if "#suggested" not in change["comment"]:
-                #    continue
-                comment = change["comment"].replace("\n", " ").replace("\t", " ")
-                outFile.write(change["title"] + "\t" + str(change["pageid"]) + "\t" + str(change["revid"]) + "\t" + change["user"] + "\t"
-                + change["timestamp"] + "\t" + comment + "\t" + ','.join(change["tags"]) + "\n")
+        for change in json["query"]["recentchanges"]:
+            if "comment" not in change:
+                continue
+            if "#suggested" not in change["comment"]:
+                continue
+            comment = change["comment"].replace("\n", " ").replace("\t", " ")
+            outFile.write(change["title"] + "\t" + str(change["pageid"]) + "\t" + str(change["revid"]) + "\t" + (change["user"] if "user" in change else "") + "\t"
+            + change["timestamp"] + "\t" + comment + "\t" + ','.join(change["tags"]) + "\t" + ("1" if "anon" in change else "0") + "\n")
 
-        time.sleep(5)
+        time.sleep(1)
 
 except KeyboardInterrupt:
     sys.exit(0)

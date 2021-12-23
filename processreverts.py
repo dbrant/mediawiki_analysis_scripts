@@ -16,9 +16,17 @@ for inLine in inLines:
     inArr = inLine.split("\t")
     title = inArr[0]
     revId = inArr[2]
+    userName = inArr[3]
     tags = inArr[6]
+    #anon = inArr[7]
 
-    reverted = "revert" in tags
+    anon = (userName.find(".") > 0) or (userName.find(":") > 0)
+
+    if not anon: continue
+
+    if "android app edit" not in tags: continue
+
+    reverted = "mw-reverted" in tags
 
     print("> " + title)
 
